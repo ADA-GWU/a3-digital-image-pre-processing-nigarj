@@ -1,3 +1,75 @@
+# Task 1: Image Preprocessing and Enhancement
+
+## Overview
+Task 1 consists of two Python scripts designed for preprocessing and enhancing grayscale images by applying blurring, morphological operations, denoising, and edge enhancement techniques.
+
+- **Script 1: `task_1_blurring.py`**
+  - Loads grayscale images from a directory.
+  - Applies Gaussian blurring to reduce noise.
+  - Uses morphological closing with different kernel sizes.
+  - Displays and saves processed images.
+  
+- **Script 2: `task_1_denoise.py`**
+  - Loads grayscale images from a directory.
+  - Denoises images using non-local means denoising.
+  - Enhances edges using Sobel, Canny, and morphological techniques.
+  - Displays and saves processed images.
+
+## Dependencies
+Both scripts require the following Python libraries:
+```sh
+pip install numpy opencv-python matplotlib scikit-image
+```
+
+## Folder Structure
+```
+project_root/
+│-- noisy/chemical/  # Folder containing noisy grayscale images
+│-- output_task_1/   # Folder where processed images will be saved
+│-- task_1_blurring.py
+│-- task_1_denoise.py
+```
+
+## Script 1: `task_1_blurring.py`
+### Functionality
+- Loads 3 random images from the `noisy/chemical` folder.
+- Ensures the foreground is white and the background is black.
+- Applies Gaussian blur to reduce noise.
+- Performs morphological closing with kernel sizes 2 and 3.
+- Displays the original and processed images.
+- Saves the processed images to `output_task_1/`.
+
+### Running the Script
+```sh
+python task_1_blurring.py
+```
+A selection window will display 3 random images. Click on one to process and view the results.
+
+## Script 2: `task_1_denoise.py`
+### Functionality
+- Loads 3 random images from the `noisy/chemical` folder.
+- Denoises images using non-local means denoising.
+- Enhances edges using:
+  - Top-hat transformation.
+  - Canny edge detection.
+  - Sobel operator.
+  - Morphological closing.
+- Displays the original and processed images.
+- Saves the processed images to `output_task_1/`.
+
+### Running the Script
+```sh
+python task_1_denoise.py
+```
+A selection window will display 3 random images. Click on one to process and view the results.
+
+## Output
+For both scripts, the processed images are saved in `output_task_1/` 
+
+
+## Conclusion
+These scripts provide a foundation for preprocessing grayscale images by reducing noise, enhancing edges, and applying morphological operations. The modular design allows easy extension and adaptation to specific image-processing tasks.
+
 # Task 2: Speckle Noise Removal in Images
 
 ## Overview
