@@ -16,49 +16,37 @@ def preprocess_image(img):
         img = cv2.bitwise_not(img)
     return img
 
-def apply_erosion(img, kernel_size):
-    return morphology.erosion(img, morphology.square(kernel_size))
-
-def apply_dilation(img, kernel_size):
-    return morphology.dilation(img, morphology.square(kernel_size))
-
-def apply_opening(img, kernel_size):
-    return morphology.opening(img, morphology.square(kernel_size))
+def apply_blur(img):
+    """Apply Gaussian blur to reduce noise before closing."""
+    return cv2.GaussianBlur(img, (3, 3), 0)
 
 def apply_closing(img, kernel_size):
     return morphology.closing(img, morphology.square(kernel_size))
 
 def show_processed_images(filename, img):
-    """Display all transformations with kernel sizes from 1 to 5 in a compact grid."""
-    
+    """Display Original, Closing (K=2), and Closing (K=3) side by side."""
     img = preprocess_image(img)  # Ensure correct foreground/background
-
-    fig, axes = plt.subplots(4, 5, figsize=(10, 8))  # Compact figure
-
-    transformations = [
-        ('Erosion', apply_erosion),
-        ('Dilation', apply_dilation),
-        ('Opening', apply_opening),
-        ('Closing', apply_closing)
-    ]
+    blurred = apply_blur(img)  # Apply blurring before closing
+    closing_k2 = apply_closing(blurred, 2)
+    closing_k3 = apply_closing(blurred, 3)
     
-    for row, (title, transform) in enumerate(transformations):
-        for col, kernel_size in enumerate(range(1, 6)):  # Kernel sizes from 1 to 5
-            result = transform(img, kernel_size)
-            axes[row, col].imshow(result, cmap='gray')
-            axes[row, col].set_title(f"{title}\nK={kernel_size}", fontsize=9)
-            axes[row, col].axis("off")
+    fig, axes = plt.subplots(1, 3, figsize=(12, 5))
+    images = [("Original", img), ("Closing K=2", closing_k2), ("Closing K=3", closing_k3)]
     
-    plt.subplots_adjust(hspace=0.3, wspace=0.2)  # Reduce spacing
-    plt.suptitle(f"Image: {filename}", fontsize=12, y=0.98)
+    for ax, (title, image) in zip(axes, images):
+        ax.imshow(image, cmap='gray')
+        ax.set_title(title)
+        ax.axis("off")
+    
+    plt.suptitle(f"Image: {filename}", fontsize=12)
     plt.show()
 
 def on_image_click(event, images, fig):
     """Identify the clicked image and process it."""
     if event.xdata is not None and event.ydata is not None:
         num_images = len(images)
-        fig_width = fig.get_size_inches()[0] * fig.dpi  # Get figure width in pixels
-        img_width = fig_width / num_images  # Approximate width of each image
+        fig_width = fig.get_size_inches()[0] * fig.dpi  
+        img_width = fig_width / num_images 
 
         index = int(event.x // img_width)  
 
@@ -69,7 +57,7 @@ def on_image_click(event, images, fig):
 
 def show_initial_selection(images):
     """Display initial selection window with 3 random images side by side."""
-    fig, axes = plt.subplots(1, len(images), figsize=(9, 4))  # Smaller selection window
+    fig, axes = plt.subplots(1, len(images), figsize=(9, 4))  
 
     for i, (filename, img) in enumerate(images):
         axes[i].imshow(img, cmap='gray')

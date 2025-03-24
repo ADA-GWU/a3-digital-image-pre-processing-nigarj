@@ -171,24 +171,26 @@ def display_results(filename, original_img, processed_median, processed_bilatera
     axes[0, 4].imshow(processed_mymethod, cmap='gray')
     axes[0, 4].set_title("My Method", fontsize=10)
     axes[0, 4].axis("off")
-
-    axes[1, 0].imshow(diff_median, cmap='gray')
-    axes[1, 0].set_title("Median Removed", fontsize=10)
+    
+    axes[1, 0].imshow(original_img, cmap='gray')
+    axes[1, 0].set_title("Original", fontsize=10)
     axes[1, 0].axis("off")
 
-    axes[1, 1].imshow(diff_bilateral, cmap='gray')
-    axes[1, 1].set_title("Bilateral Removed", fontsize=10)
+    axes[1, 1].imshow(diff_median, cmap='gray')
+    axes[1, 1].set_title("Median Removed", fontsize=10)
+    axes[1, 1].axis("off")
 
-    axes[1, 2].imshow(diff_crimmins, cmap='gray')
-    axes[1, 2].set_title("Crimmins Removed", fontsize=10)
+    axes[1, 2].imshow(diff_bilateral, cmap='gray')
+    axes[1, 2].set_title("Bilateral Removed", fontsize=10)
 
-    axes[1, 3].imshow(diff_mymethod, cmap='gray')
-    axes[1, 3].set_title("My Method Removed", fontsize=10)
+    axes[1, 3].imshow(diff_crimmins, cmap='gray')
+    axes[1, 3].set_title("Crimmins Removed", fontsize=10)
 
-    axes[1, 4].imshow(calculate_difference_image(processed_crimmins, processed_mymethod), cmap='gray')
-    axes[1, 4].set_title("Crimmins - My Method", fontsize=10)
+    axes[1, 4].imshow(diff_mymethod, cmap='gray')
+    axes[1, 4].set_title("My Method Removed", fontsize=10)
 
-    plt.suptitle(f"Speckle and Salt & Pepper Noise Removal Comparison: {filename}", fontsize=12, y=0.95)
+
+
     plt.tight_layout()
     plt.show()
 
@@ -249,7 +251,7 @@ def process_and_show(filename, img):
                     processed_mymethod, diff_median, diff_bilateral, diff_crimmins, diff_mymethod)
 
 def main():
-    images = load_images("noisy/speckle")  # Assuming speckle noise might also have salt & pepper
+    images = load_images("noisy/speckle")  
     show_initial_selection(images)
 
 if __name__ == "__main__":
