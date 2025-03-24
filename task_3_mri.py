@@ -4,10 +4,9 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
 
 # Load the DICOM file
-dicom_path = "E1154S7I.dcm"  # Update with your file path
+dicom_path = "E1154S7I.dcm"  
 dicom_data = pydicom.dcmread(dicom_path)
 
-# Extract pixel data and normalize
 image_data = dicom_data.pixel_array.astype(np.float32)
 image_data = (image_data - np.min(image_data)) / (np.max(image_data) - np.min(image_data))  # Normalize to [0,1]
 

@@ -146,10 +146,22 @@ def calculate_difference_image(original_img, processed_img):
     diff_normalized = cv2.normalize(diff, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
     return diff_normalized
 
+
+def save_plot(filename):
+    """Save the current plot to the output_task_2 folder."""
+    output_folder = "output_task_2"
+    # Ensure the folder exists
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+    
+    # Set the full path for saving the plot
+    plot_filename = os.path.join(output_folder, filename + "_processed.png")
+    plt.savefig(plot_filename)
+    print(f"Plot saved as {plot_filename}")
+
 def display_results(filename, original_img, processed_median, processed_bilateral, processed_crimmins, processed_mymethod,
                     diff_median, diff_bilateral, diff_crimmins, diff_mymethod):
     """Displays the original image, processed images, and difference images."""
-
     fig, axes = plt.subplots(2, 5, figsize=(20, 8))  # Adjusted for "myMethod"
 
     axes[0, 0].imshow(original_img, cmap='gray')
@@ -189,9 +201,11 @@ def display_results(filename, original_img, processed_median, processed_bilatera
     axes[1, 4].imshow(diff_mymethod, cmap='gray')
     axes[1, 4].set_title("My Method Removed", fontsize=10)
 
-
-
     plt.tight_layout()
+
+    # Save the figure after closing
+    fig.canvas.mpl_connect('close_event', lambda event: save_plot(filename))
+    
     plt.show()
 
 def on_image_click(event, images, fig):

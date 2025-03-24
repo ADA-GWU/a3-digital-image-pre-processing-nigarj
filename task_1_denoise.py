@@ -14,8 +14,7 @@ def denoise_image(img):
 
 def enhance_lines(img):
     """Enhance lines using the best chosen method."""
-    inverted = cv2.bitwise_not(img)  # Invert for better edge detection
-    
+    inverted = cv2.bitwise_not(img)  
     # Top-Hat transformation
     tophat = white_tophat(inverted, disk(3))
     
@@ -45,10 +44,10 @@ def process_image(img):
         ("Denoised", denoised),
         ("Enhanced (Closing)", enhanced_closing),
         ("Enhanced (Edge detection)", enhanced_edge)
-        
     ]
 
-def show_processed_images(filename, img):
+def save_processed_images(filename, img, output_folder):
+    """Save the figure to the specified folder"""
     steps = process_image(img)
     
     fig, axes = plt.subplots(1, 4, figsize=(16, 5))
@@ -59,9 +58,15 @@ def show_processed_images(filename, img):
         axes[i].axis("off")
     
     plt.suptitle(f"Processing Steps: {filename}")
-    plt.show()
+    
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+    
+    output_path = os.path.join(output_folder, f"{filename}_processed.png")
+    plt.savefig(output_path)
+    plt.close(fig)
 
-def on_image_click(event, images, fig):
+def on_image_click(event, images, fig, output_folder):
     if event.xdata is not None and event.ydata is not None:
         num_images = len(images)
         fig_width = fig.get_size_inches()[0] * fig.dpi
@@ -71,9 +76,28 @@ def on_image_click(event, images, fig):
         if 0 <= index < num_images:
             filename, img = images[index]
             plt.close(fig)
-            show_processed_images(filename, img)
+            show_processed_images(filename, img, output_folder)
 
-def show_initial_selection(images):
+def show_processed_images(filename, img, output_folder):
+    steps = process_image(img)
+    
+    fig, axes = plt.subplots(1, 4, figsize=(16, 5))
+    
+    for i, (title, image) in enumerate(steps):
+        axes[i].imshow(image, cmap='gray')
+        axes[i].set_title(title)
+        axes[i].axis("off")
+    
+    plt.suptitle(f"Processing Steps: {filename}")
+    
+    def on_close(event):
+        save_processed_images(filename, img, output_folder)
+    
+    fig.canvas.mpl_connect('close_event', on_close)
+    
+    plt.show()
+
+def show_initial_selection(images, output_folder):
     fig, axes = plt.subplots(1, len(images), figsize=(9, 4))
     
     for i, (filename, img) in enumerate(images):
@@ -82,12 +106,13 @@ def show_initial_selection(images):
         axes[i].axis("off")
     
     plt.figtext(0.5, 0.01, "Click on an image to proceed", ha="center", fontsize=10)
-    fig.canvas.mpl_connect('button_press_event', lambda event: on_image_click(event, images, fig))
+    fig.canvas.mpl_connect('button_press_event', lambda event: on_image_click(event, images, fig, output_folder))
     plt.show()
 
 def main():
     images = load_images("noisy/chemical")
-    show_initial_selection(images)
+    output_folder = "output_task_1"
+    show_initial_selection(images, output_folder)
 
 if __name__ == "__main__":
     main()
