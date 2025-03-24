@@ -79,39 +79,42 @@ python task_2_speckle.py
 Processed images are saved in the `output_task_2/` directory, highlighting noise reduction effectiveness.
 
 ---
-### **Task 3: MRI Slice Viewer**
-This task implements a **DICOM (Digital Imaging and Communications in Medicine) MRI Slice Viewer**. The script loads a **DICOM file**, processes the image data, and allows users to visualize MRI slices using an interactive slider.
 
-#### **Features**
-- **Loads a DICOM file** from a publicly accessible Google Drive link.
-- **Displays MRI slices** using a colormap.
-- **Normalizes image data** for better visualization.
+# Task 3: MRI Slice Viewer with Metadata
+
+## Overview
+This script implements a **DICOM MRI Slice Viewer** that loads, visualizes, and extracts metadata from a DICOM file. The file is fetched dynamically from Google Drive.
+
+## Features
+- **Downloads a DICOM file** from a Google Drive link.
+- **Extracts and prints metadata** (except pixel data) to the console.
+- **Displays MRI slices** with a colormap.
 - **Provides an interactive slider** to navigate through slices.
+- **Ensures dynamic image updates** based on slider input.
 
-#### **Dependencies**
+## Dependencies
+Install the required Python libraries:
 ```sh
 pip install pydicom numpy matplotlib requests
 ```
-- **pydicom** → Reads DICOM medical images.
-- **numpy** → Handles array operations and normalization.
-- **matplotlib** → Displays images and provides slider widget.
-- **requests** → Fetches the DICOM file from Google Drive.
 
-#### **Running Task 3 Script**
+## Running the Script
 ```sh
 python task_3_mri.py
 ```
 
-#### **How It Works**
-1. **Download the DICOM File**
-   - The script fetches the DICOM file from Google Drive using `requests`.
-2. **Process the Image Data**
-   - Extracts **pixel array** from the DICOM file.
-   - Normalizes data to a **[0,1] scale** for better contrast.
-3. **Display the Image**
-   - Displays the first MRI slice with **Inferno colormap**.
-   - A **slider widget** allows users to scroll through slices interactively.
+## Metadata Extraction
+- The script dynamically extracts metadata from the DICOM file and prints it **to the console**.
+
+## Interactive MRI Viewer
+- The first MRI slice is displayed using **Matplotlib**.
+- The **Inferno** colormap enhances contrast.
+- A **slider widget** allows users to scroll through slices interactively.
 
 ---
+
+## Conclusion
+These scripts provide a foundation for preprocessing grayscale images, removing noise, and visualizing DICOM MRI slices. The modular design allows easy extension and adaptation to specific image-processing tasks.
+
 
 
