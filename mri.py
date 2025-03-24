@@ -11,12 +11,11 @@ dicom_data = pydicom.dcmread(dicom_path)
 image_data = dicom_data.pixel_array.astype(np.float32)
 image_data = (image_data - np.min(image_data)) / (np.max(image_data) - np.min(image_data))  # Normalize to [0,1]
 
-# Set up figure and axis
 fig, ax = plt.subplots(figsize=(6, 6))
 plt.subplots_adjust(left=0.1, bottom=0.25)  # Space for slider
 
 # Display the first slice
-colormap = 'inferno'  # Try 'gray', 'magma', or 'viridis'
+colormap = 'inferno' 
 im = ax.imshow(image_data[0], cmap=colormap)
 ax.set_title("MRI Slice Viewer")
 
@@ -37,5 +36,4 @@ def update(val):
 # Connect slider to update function
 slider.on_changed(update)
 
-# Show the interactive plot
 plt.show()
