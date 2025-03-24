@@ -146,68 +146,6 @@ def calculate_difference_image(original_img, processed_img):
     diff_normalized = cv2.normalize(diff, None, 0, 255, cv2.NORM_MINMAX, cv2.CV_8U)
     return diff_normalized
 
-
-def save_plot(filename):
-    """Save the current plot to the output_task_2 folder."""
-    output_folder = "output_task_2"
-    # Ensure the folder exists
-    if not os.path.exists(output_folder):
-        os.makedirs(output_folder)
-    
-    # Set the full path for saving the plot
-    plot_filename = os.path.join(output_folder, filename + "_processed.png")
-    plt.savefig(plot_filename)
-    print(f"Plot saved as {plot_filename}")
-
-def display_results(filename, original_img, processed_median, processed_bilateral, processed_crimmins, processed_mymethod,
-                    diff_median, diff_bilateral, diff_crimmins, diff_mymethod):
-    """Displays the original image, processed images, and difference images."""
-    fig, axes = plt.subplots(2, 5, figsize=(20, 8))  # Adjusted for "myMethod"
-
-    axes[0, 0].imshow(original_img, cmap='gray')
-    axes[0, 0].set_title("Original", fontsize=10)
-    axes[0, 0].axis("off")
-
-    axes[0, 1].imshow(processed_median, cmap='gray')
-    axes[0, 1].set_title("Median Filtered", fontsize=10)
-    axes[0, 1].axis("off")
-
-    axes[0, 2].imshow(processed_bilateral, cmap='gray')
-    axes[0, 2].set_title("Bilateral Filtered", fontsize=10)
-    axes[0, 2].axis("off")
-
-    axes[0, 3].imshow(processed_crimmins, cmap='gray')
-    axes[0, 3].set_title("Crimmins Filtered", fontsize=10)
-    axes[0, 3].axis("off")
-
-    axes[0, 4].imshow(processed_mymethod, cmap='gray')
-    axes[0, 4].set_title("My Method", fontsize=10)
-    axes[0, 4].axis("off")
-    
-    axes[1, 0].imshow(original_img, cmap='gray')
-    axes[1, 0].set_title("Original", fontsize=10)
-    axes[1, 0].axis("off")
-
-    axes[1, 1].imshow(diff_median, cmap='gray')
-    axes[1, 1].set_title("Median Removed", fontsize=10)
-    axes[1, 1].axis("off")
-
-    axes[1, 2].imshow(diff_bilateral, cmap='gray')
-    axes[1, 2].set_title("Bilateral Removed", fontsize=10)
-
-    axes[1, 3].imshow(diff_crimmins, cmap='gray')
-    axes[1, 3].set_title("Crimmins Removed", fontsize=10)
-
-    axes[1, 4].imshow(diff_mymethod, cmap='gray')
-    axes[1, 4].set_title("My Method Removed", fontsize=10)
-
-    plt.tight_layout()
-
-    # Save the figure after closing
-    fig.canvas.mpl_connect('close_event', lambda event: save_plot(filename))
-    
-    plt.show()
-
 def on_image_click(event, images, fig):
     """Identify the clicked image and process it."""
     if event.xdata is not None and event.ydata is not None:
@@ -264,6 +202,70 @@ def process_and_show(filename, img):
     display_results(filename, img, processed_median, processed_bilateral, processed_crimmins,
                     processed_mymethod, diff_median, diff_bilateral, diff_crimmins, diff_mymethod)
 
+def save_plot(fig, filename):
+    """Save the current plot to the output_task_2 folder."""
+    output_folder = "output_task_2"
+    # Ensure the folder exists
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+    
+    # Set the full path for saving the plot
+    plot_filename = os.path.join(output_folder, filename + "_processed.png")
+    fig.savefig(plot_filename)
+    print(f"Plot saved as {plot_filename}")
+
+def display_results(filename, original_img, processed_median, processed_bilateral, processed_crimmins, processed_mymethod,
+                    diff_median, diff_bilateral, diff_crimmins, diff_mymethod):
+    """Displays the original image, processed images, and difference images."""
+    fig, axes = plt.subplots(2, 5, figsize=(20, 8))  # Adjusted for "myMethod"
+
+    axes[0, 0].imshow(original_img, cmap='gray')
+    axes[0, 0].set_title("Original", fontsize=10)
+    axes[0, 0].axis("off")
+
+    axes[0, 1].imshow(processed_median, cmap='gray')
+    axes[0, 1].set_title("Median Filtered", fontsize=10)
+    axes[0, 1].axis("off")
+
+    axes[0, 2].imshow(processed_bilateral, cmap='gray')
+    axes[0, 2].set_title("Bilateral Filtered", fontsize=10)
+    axes[0, 2].axis("off")
+
+    axes[0, 3].imshow(processed_crimmins, cmap='gray')
+    axes[0, 3].set_title("Crimmins Filtered", fontsize=10)
+    axes[0, 3].axis("off")
+
+    axes[0, 4].imshow(processed_mymethod, cmap='gray')
+    axes[0, 4].set_title("My Method", fontsize=10)
+    axes[0, 4].axis("off")
+    
+    axes[1, 0].imshow(original_img, cmap='gray')
+    axes[1, 0].set_title("Original", fontsize=10)
+    axes[1, 0].axis("off")
+
+    axes[1, 1].imshow(diff_median, cmap='gray')
+    axes[1, 1].set_title("Median Removed", fontsize=10)
+    axes[1, 1].axis("off")
+
+    axes[1, 2].imshow(diff_bilateral, cmap='gray')
+    axes[1, 2].set_title("Bilateral Removed", fontsize=10)
+
+    axes[1, 3].imshow(diff_crimmins, cmap='gray')
+    axes[1, 3].set_title("Crimmins Removed", fontsize=10)
+
+    axes[1, 4].imshow(diff_mymethod, cmap='gray')
+    axes[1, 4].set_title("My Method Removed", fontsize=10)
+
+    plt.tight_layout()
+
+    # Save the figure after closing
+    def on_close(event):
+        save_plot(fig, filename)
+
+    # Register the close event
+    fig.canvas.mpl_connect('close_event', on_close)
+    
+    plt.show()
 def main():
     images = load_images("noisy/speckle")  
     show_initial_selection(images)
