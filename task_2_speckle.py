@@ -114,7 +114,7 @@ def apply_crimmins_speckle_removal(img, iterations=3):
         return b.astype(np.uint8)
 
     img_adjusted = img.copy()
-    for _ in range(iterations):  # Iterations - you can adjust this
+    for _ in range(iterations):  
         img_adjusted = adjust_dark_pixels(img_adjusted)
         img_adjusted = adjust_light_pixels(img_adjusted)
     return img_adjusted
