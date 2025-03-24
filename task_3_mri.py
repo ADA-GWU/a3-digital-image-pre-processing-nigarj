@@ -2,10 +2,15 @@ import pydicom
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Slider
+import requests
+import io
+# Google Drive direct download link
+dicom_url = "https://drive.google.com/uc?id=1eY2JnfI9RnYeT6ItZ_Fn_Yh3JXpAD-jC"
 
-# Load the DICOM file
-dicom_path = "E1154S7I.dcm"  
-dicom_data = pydicom.dcmread(dicom_path)
+# Download the DICOM file
+response = requests.get(dicom_url)
+response.raise_for_status()  # Ensure request was successful
+dicom_data = pydicom.dcmread(io.BytesIO(response.content))
 
 image_data = dicom_data.pixel_array.astype(np.float32)
 image_data = (image_data - np.min(image_data)) / (np.max(image_data) - np.min(image_data))  # Normalize to [0,1]
